@@ -1,0 +1,140 @@
+@import 'tailwindcss';
+
+/* Tokens extraídos do Sistema-Ludus (app) e do Ludus-Web_Admin. */
+@theme {
+  --color-indigo: #31358b;
+  --color-indigo-600: #272b73;
+  --color-navy: #04096d;
+  --color-navy-900: #020650;
+  --color-red: #e62325;
+  --color-red-600: #c81d1f;
+  --color-yellow: #fbbc04;
+  --color-yellow-600: #e5aa00;
+  --color-gold-ink: #9a6b00;
+  --color-ink: #1a1a2e;
+  --color-ink-soft: #4b4f6b;
+  --color-ink-mute: #5f6380;
+  --color-line: #e5e7f2;
+  --color-lavender: #f7f8ff;
+  --color-lavender-2: #f0f2ff;
+  --color-lavender-3: #eef0ff;
+  --color-success: #2fa84f;
+  --color-success-ink: #1f7a39;
+  --color-danger: #b3193a;
+
+  --color-tier-latao: #8b7355;
+  --color-tier-bronze: #cd7f32;
+  --color-tier-prata: #9ca3af;
+  --color-tier-ouro: #fbbc04;
+  --color-tier-diamante: #3b82f6;
+
+  --font-display: 'Saira', 'Figtree Variable', system-ui, sans-serif;
+  --font-sans: 'Figtree Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --radius-sheet: 2rem;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+    scrollbar-color: var(--color-indigo) var(--color-lavender-2);
+  }
+
+  body {
+    @apply bg-white font-sans text-ink antialiased;
+    caret-color: var(--color-indigo);
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-yellow);
+    color: var(--color-navy);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-yellow);
+    outline-offset: 3px;
+    border-radius: 0.5rem;
+  }
+
+  a {
+    text-underline-offset: 0.2em;
+  }
+
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-lavender-2);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-indigo);
+    border-radius: 999px;
+    border: 3px solid var(--color-lavender-2);
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Destravar de nível: único momento de movimento autoral da página. */
+@keyframes unlock-pop {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  40% {
+    transform: translateY(-10px) scale(1.03);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes shackle-open {
+  0% {
+    transform: translateY(0) rotate(0);
+  }
+  100% {
+    transform: translateY(-3px) rotate(-18deg);
+  }
+}
+
+.unlock-pop {
+  animation: unlock-pop 620ms var(--ease-out-expo) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
