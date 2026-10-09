@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { ArrowRight, CheckCircle2, LoaderCircle } from 'lucide-react';
 import logo from '../assets/logo-ludus.webp';
 import { CONTACT_EMAIL } from '../data';
@@ -7,9 +7,14 @@ import { SplashDecor } from './Decor';
 type Status = 'idle' | 'sending' | 'sent' | 'error';
 type Fields = { nome: string; instituicao: string; whatsapp: string };
 
-// Defina VITE_CONTACT_ENDPOINT para receber os leads via POST (JSON).
-// Sem endpoint, o formulário abre o e-mail do visitante já preenchido.
-const ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT as string | undefined;
+// Os pedidos vão por e-mail para CONTACT_EMAIL via FormSubmit (sem servidor próprio).
+// No primeiro envio o FormSubmit manda um e-mail de ativação para esse endereço.
+// VITE_CONTACT_ENDPOINT troca o destino por outro endpoint que aceite POST JSON.
+const ENDPOINT =
+  (import.meta.env.VITE_CONTACT_ENDPOINT as string | undefined) || `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
+
+// Disparado pelos botões da seção de planos.
+export const PLAN_EVENT = 'ludus:plano';
 
 function maskPhone(value: string) {
   const d = value.replace(/\D/g, '').slice(0, 11);
@@ -30,6 +35,14 @@ export function Contact() {
   const [fields, setFields] = useState<Fields>({ nome: '', instituicao: '', whatsapp: '' });
   const [errors, setErrors] = useState<Partial<Record<keyof Fields, string>>>({});
   const [status, setStatus] = useState<Status>('idle');
+  const [plano, setPlano] = useState<string | null>(null);
+  const [honey, setHoney] = useState('');
+
+  useEffect(() => {
+    const onPlan = (e: Event) => setPlano((e as CustomEvent<string>).detail);
+    window.addEventListener(PLAN_EVENT, onPlan);
+    return () => window.removeEventListener(PLAN_EVENT, onPlan);
+  }, []);
 
   const set = (key: keyof Fields) => (value: string) => {
     setFields((f) => ({ ...f, [key]: key === 'whatsapp' ? maskPhone(value) : value }));
@@ -44,18 +57,23 @@ export function Contact() {
 
     setStatus('sending');
     try {
-      if (ENDPOINT) {
-        const res = await fetch(ENDPOINT, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...fields, origem: 'landing-ludus' }),
-        });
-        if (!res.ok) throw new Error(String(res.status));
-      } else {
-        const body = `Nome: ${fields.nome}\nLoja ou instituição: ${fields.instituicao}\nWhatsApp: ${fields.whatsapp}`;
-        window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Quero conhecer o Ludus')}&body=${encodeURIComponent(body)}`;
-      }
+      const res = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          Nome: fields.nome,
+          'Loja ou instituição': fields.instituicao,
+          WhatsApp: fields.whatsapp,
+          'Plano de interesse': plano ?? 'Não informado',
+          _subject: `Novo pedido de demonstração do Ludus: ${fields.instituicao}`,
+          _template: 'table',
+          _honey: honey,
+        }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { success?: string | boolean };
+      if (!res.ok || String(data.success) !== 'true') throw new Error(String(res.status));
       setStatus('sent');
+      setFields({ nome: '', instituicao: '', whatsapp: '' });
     } catch {
       setStatus('error');
     }
@@ -82,9 +100,7 @@ export function Contact() {
                 <CheckCircle2 size={48} className="mx-auto text-success" strokeWidth={2} />
                 <p className="mt-4 font-display text-2xl font-black">Pedido recebido!</p>
                 <p className="mt-2 text-ink-mute">
-                  {ENDPOINT
-                    ? 'A equipe Ludus vai falar com você pelo WhatsApp informado.'
-                    : 'Confira o e-mail que abriu no seu aplicativo e envie a mensagem para concluir.'}
+                  A equipe Ludus vai falar com você pelo WhatsApp informado.
                 </p>
                 <button
                   type="button"
@@ -96,6 +112,26 @@ export function Contact() {
               </div>
             ) : (
               <form noValidate onSubmit={onSubmit} className="space-y-5">
+                {plano && (
+                  <p className="flex items-center justify-between gap-3 rounded-2xl bg-lavender-2 px-4 py-3 text-sm text-ink-soft">
+                    <span>
+                      Plano de interesse: <span className="font-black text-indigo">{plano}</span>
+                    </span>
+                    <button type="button" onClick={() => setPlano(null)} className="text-xs font-bold text-ink-mute underline">
+                      Remover
+                    </button>
+                  </p>
+                )}
+                <input
+                  type="text"
+                  name="_honey"
+                  value={honey}
+                  onChange={(e) => setHoney(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden
+                  className="hidden"
+                />
                 <Field
                   id="nome"
                   label="Nome"
@@ -126,7 +162,11 @@ export function Contact() {
 
                 {status === 'error' && (
                   <p role="alert" className="rounded-2xl bg-[#FFE9EA] px-4 py-3 text-sm font-semibold text-danger">
-                    Não conseguimos enviar agora. Tente de novo em instantes ou escreva para {CONTACT_EMAIL}.
+                    Não conseguimos enviar agora. Tente de novo em instantes ou escreva para{' '}
+                    <a href={`mailto:${CONTACT_EMAIL}`} className="underline">
+                      {CONTACT_EMAIL}
+                    </a>
+                    .
                   </p>
                 )}
 

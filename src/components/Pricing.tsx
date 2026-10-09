@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Check, Plus } from 'lucide-react';
+import { PLAN_EVENT } from './Contact';
 
 type Plan = {
   name: string;
@@ -127,6 +128,7 @@ export function Pricing() {
 
               <a
                 href="#contato"
+                onClick={() => window.dispatchEvent(new CustomEvent(PLAN_EVENT, { detail: plan.name }))}
                 className={`mt-8 flex h-14 items-center justify-center rounded-2xl font-extrabold transition-colors ${
                   plan.featured
                     ? 'bg-yellow text-navy hover:bg-yellow-600'
