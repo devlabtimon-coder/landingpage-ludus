@@ -45,7 +45,10 @@ export function Footer() {
         <div className="mt-14 flex flex-col gap-3 border-t border-white/10 pt-8 text-sm text-[#A9ADE0] md:flex-row md:justify-between">
           <p>© {new Date().getFullYear()} Cocais Tech. Todos os direitos reservados.</p>
           <p className="shrink-0">
-            Desenvolvido por <span className="font-bold text-white">Cocais Tech</span>
+            Desenvolvido por{' '}
+            <a href="/" className="font-bold text-white underline-offset-4 hover:underline">
+              Cocais Tech
+            </a>
           </p>
         </div>
       </div>
