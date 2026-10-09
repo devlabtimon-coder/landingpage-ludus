@@ -3,8 +3,6 @@ import { ArrowRight } from 'lucide-react';
 import logo from '../assets/logo-full.webp';
 import { CONTACT_EMAIL, NAV } from '../data';
 
-const TEAM = ['Joseni Daniel', 'Hemyly Rayany', 'Ramilson Rios', 'Marcelo Loureiro', 'Guilherme Raphael', 'Hélio Victor'];
-
 export function Footer() {
   return (
     <footer className="bg-navy pt-16 pb-28 text-white lg:pb-12">
@@ -45,10 +43,10 @@ export function Footer() {
         </div>
 
         <div className="mt-14 flex flex-col gap-3 border-t border-white/10 pt-8 text-sm text-[#A9ADE0] md:flex-row md:justify-between">
-          <p>
-            Desenvolvido por {TEAM.join(', ')} · Orientação: Nara Chaves · IFMA Campus Timon
+          <p>© {new Date().getFullYear()} Ludus. Todos os direitos reservados.</p>
+          <p className="shrink-0">
+            Desenvolvido por <span className="font-bold text-white">Cocaistech</span>
           </p>
-          <p className="shrink-0">© {new Date().getFullYear()} Ludus. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>
