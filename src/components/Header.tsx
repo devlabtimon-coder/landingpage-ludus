@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
-import logo from '../assets/logo-full.webp';
+import logo from '../assets/logo-ludus.webp';
 import { NAV } from '../data';
 
 export function Header() {
@@ -22,7 +22,7 @@ export function Header() {
     >
       <div className="mx-auto flex h-18 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
         <a href="#inicio" className="shrink-0" aria-label="Ludus, voltar ao início">
-          <img src={logo} alt="Ludus" width={900} height={389} className="h-11 w-auto sm:h-12" />
+          <img src={logo} alt="Ludus" width={900} height={308} className="h-10 w-auto sm:h-12" />
         </a>
 
         <nav aria-label="Principal" className="hidden items-center gap-8 lg:flex">

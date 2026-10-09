@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { ArrowRight, CheckCircle2, LoaderCircle } from 'lucide-react';
-import logo from '../assets/logo-full.webp';
+import logo from '../assets/logo-ludus.webp';
 import { CONTACT_EMAIL } from '../data';
 import { SplashDecor } from './Decor';
 
@@ -66,7 +66,7 @@ export function Contact() {
       <SplashDecor variant="cta" />
       <div className="relative mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-12 lg:items-center lg:px-8">
         <div className="lg:col-span-6">
-          <img src={logo} alt="Ludus, construindo caminhos de ludicidade" width={900} height={389} className="w-56 sm:w-64" />
+          <img src={logo} alt="Ludus" width={900} height={308} className="w-56 sm:w-64" />
           <h2 className="mt-10 text-4xl leading-[1.02] font-black sm:text-[3.4rem]">
             Quer ver o Ludus funcionando no seu acervo?
           </h2>

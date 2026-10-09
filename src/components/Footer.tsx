@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
-import logo from '../assets/logo-full.webp';
+import logo from '../assets/logo-ludus.webp';
 import { CONTACT_EMAIL, NAV } from '../data';
 
 export function Footer() {
@@ -9,7 +9,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-12">
           <div className="md:col-span-5">
-            <img src={logo} alt="Ludus, construindo caminhos de ludicidade" width={900} height={389} className="w-48" />
+            <img src={logo} alt="Ludus" width={900} height={308} className="w-48" />
             <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-[#C9CCF2]">
               Gestão de acervos de jogos de tabuleiro com aprovação de cadastro, níveis de acesso e temporadas.
               Nascido e em uso no IFMA Campus Timon.
